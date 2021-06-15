@@ -42,3 +42,21 @@ WHERE "products".description = 'diet pepsi'
 GROUP BY "products".description
 ;
 
+-- 9. How much was the total cost of each order?
+SELECT "orders".id, SUM("products".unit_price * "line_items".quantity) FROM "orders"
+JOIN "line_items" ON "line_items".order_id = "orders".id
+JOIN "products" ON "line_items".product_id = "products".id
+GROUP BY "orders".id
+;
+
+-- 10. How much has each customer spent in total
+SELECT "customers".first_name, "customers".last_name, SUM("products".unit_price * "line_items".quantity) FROM "customers"
+JOIN "addresses" ON "addresses".customer_id = "customers".id
+JOIN "orders" ON "orders".address_id = "addresses".id
+JOIN "line_items" ON "line_items".order_id = "orders".id
+JOIN "products" ON "line_items".product_id = "products".id
+GROUP BY "customers".first_name, "customers".last_name
+;
+
+-- 11. How much has each customer spent in total? Customers who have spent $0 should still show up in the table. It should say 0, not NULL
+
